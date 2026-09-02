@@ -1,0 +1,14 @@
+[
+  {
+    "no":1,
+    "bunyi":"Ketik 'end' jika sudah selesai setelah menulis deskripsi"
+  },
+  {
+    "no":2,
+    "bunyi":"Ketik angka 0 untuk kembali ke halaman utama"
+  },
+  {
+    "no":3,
+    "bunyi":"Kalau mau keluar dari menu yang sudah terpilih, bisa tekan 0 atau ketik 'end'"
+  }
+]
