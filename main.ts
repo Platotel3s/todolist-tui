@@ -1,11 +1,10 @@
 import { Task, TaskStatus } from "./task";
 import { inputan, rdl } from "./inputan";
-import { bacaTugas, caraInput, hapusTugas, simpanTugas, updateStatus, updateTugas } from "./logics";
+import { bacaTugas,hapusTugas, simpanTugas, updateStatus, updateTugas } from "./logics";
 import { aturanInputan, tableAturan } from "./utils/tables/rulesTable";
 import chalk from "chalk";
 import { daftus } from "./utils/tables/daftarTugas";
 import { prosesLogin, prosesRegister } from "./auth/authService";
-import { readFile } from "node:fs/promises";
 
 async function main(){
   console.clear();
