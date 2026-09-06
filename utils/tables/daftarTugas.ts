@@ -14,42 +14,37 @@ export function warnaStatus(status:TaskStatus,lebar:number){
   }
 }
 
-export function warnaNomorTugas(no:number,lebarNo:number){
-  const teksNomor=String(no).padEnd(lebarNo);
-  return chalk.yellow(teksNomor);
+function warnaValue(headerKolom:string,value:string|number,lebarValue:number){
+  const normalizeHK=headerKolom.toLowerCase();
+  if(normalizeHK==="no"){
+    const fixColorize=String(value).padEnd(lebarValue);
+    return chalk.whiteBright(fixColorize);
+  }else if(normalizeHK==="judul"){
+    const fixColorize=String(value).padEnd(lebarValue);
+    return chalk.yellowBright(fixColorize);
+  }else if(normalizeHK==="keterangan"){
+    const fixColorize=String(value).padEnd(lebarValue);
+    return chalk.cyanBright(fixColorize);
+  }
 }
-export function warnaTitle(teks:string,lebTil:number){
-  const teksTitle=String(teks).padEnd(lebTil);
-  return chalk.yellowBright(teksTitle);
+
+function warnaHeader(label:string,ukuran:number){
+  const teks=String(label).padEnd(ukuran);
+  return chalk.whiteBright(teks);
 }
-export function warnaDesc(teks:string,lebDesc:number){
-  const teksDesc=String(teks).padEnd(lebDesc);
-  return chalk.cyanBright(teksDesc);
-}
-export function warnaHeaderNo(no:string,lebarHN:number){
-  const teksNo=String(no).padEnd(lebarHN);
-  return chalk.yellow(teksNo);
-}
-export function warnaHeaderTitle(teks:string,lebarHT:number){
-  const teksTit=String(teks).padEnd(lebarHT);
-  return chalk.yellowBright(teksTit);
-}
-export function warnaHeaderDesc(desc:string,lebarHD:number){
-  const teksDesc=String(desc).padEnd(lebarHD);
-  return chalk.cyanBright(teksDesc);
-}
+
 export function daftus(data:Task[]):void{
   const lebarId=Math.max(2,...data.map((b)=>String(b.id).length));
   const lebarTitle=Math.max(3,...data.map((c)=>String(c.title).length));
   const lebarDesc=Math.max(5,...data.map((d)=>String(d.desc).length));
-  const lebarStatus=Math.max(3,...data.map((e)=>String(e.status).length));
+  const lebarStatus=Math.max(6,...data.map((e)=>String(e.status).length));
 
   const garis=`+-${"-".repeat(lebarId)}-+-${"-".repeat(lebarTitle)}-+-${"-".repeat(lebarDesc)}-+-${"-".repeat(lebarStatus)}-+`;
   console.log(garis);
-  console.log(`| ${warnaHeaderNo("No",lebarId)} | ${warnaHeaderTitle("Judul",lebarTitle)} | ${warnaHeaderDesc("Description",lebarDesc)} | ${"Status".padEnd(lebarStatus)}|`);
+  console.log(`| ${warnaHeader("No",lebarId)} | ${warnaHeader("Judul",lebarTitle)} | ${warnaHeader("Keterangan",lebarDesc)} | ${warnaHeader("Status",lebarStatus)} |`);
   console.log(garis);
   data.forEach((dataz)=>{
-    console.log(`| ${warnaNomorTugas(dataz.id,lebarId)} | ${warnaTitle(dataz.title,lebarTitle)} | ${warnaDesc(dataz.desc,lebarDesc)} | ${warnaStatus(dataz.status,lebarStatus)} |`);
+    console.log(`| ${warnaValue("No",dataz.id,lebarId)} | ${warnaValue("Judul",dataz.title,lebarTitle)} | ${warnaValue("Keterangan",dataz.desc,lebarDesc)} | ${warnaStatus(dataz.status,lebarStatus)} |`);
   });
   console.log(garis);
 }

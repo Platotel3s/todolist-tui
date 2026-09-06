@@ -4,17 +4,24 @@ import { Rules, Task, TaskStatus } from "./task";
 import { daftus } from "./utils/tables/daftarTugas";
 import chalk from "chalk";
 
-export async function simpanTugas(daftarTugas:Task[]):Promise<void>{
-  await writeFile("dataTask.json",JSON.stringify(daftarTugas,null,2),"utf-8");
-}
-
-export async function bacaTugas():Promise<Task[]>{
+export async function bacaSemuaTugas():Promise<Task[]>{
   try{
     const datas=await readFile("dataTask.json","utf-8");
     return JSON.parse(datas);
   }catch{
     return [];
   }
+}
+
+export async function simpanTugas(tugasUser:Task[],owner:string):Promise<void>{
+  const semua=await bacaSemuaTugas();
+  const tugasUserLain=semua.filter(t=>t.owner!==owner);
+  await writeFile("dataTask.json",JSON.stringify([...tugasUserLain,...tugasUser],null,2),"utf-8");
+}
+
+export async function bacaTugas(owner:string):Promise<Task[]>{
+  const semua=await bacaSemuaTugas();
+  return semua.filter(t=>t.owner===owner);
 }
 
 export async function caraInputUSer():Promise<Rules[]>{
@@ -38,8 +45,8 @@ export async function caraInput():Promise<void>{
   });
 }
 
-export async function updateTugas(daftarTugas:Task[]):Promise<void>{
-  const tampilkanTugas=await bacaTugas();
+export async function updateTugas(daftarTugas:Task[],owner:string):Promise<void>{
+  const tampilkanTugas=await bacaTugas(owner);
   if(tampilkanTugas.length===0){
     console.log("Belum ada tugas yang terdaftar");
     return;
@@ -56,11 +63,11 @@ export async function updateTugas(daftarTugas:Task[]):Promise<void>{
   const deskripsiBaru=await inputan("Deskripsi Baru : ");
   tugas.title=judulBaru;
   tugas.desc=deskripsiBaru;
-  await simpanTugas(daftarTugas);
+  await simpanTugas(daftarTugas,owner);
   console.log("Berhasil update tugas");
 }
 
-export async function hapusTugas(daftarTugas:Task[]):Promise<void>{
+export async function hapusTugas(daftarTugas:Task[],owner:string):Promise<void>{
   if (daftarTugas.length===0) {
     console.log(chalk.red("Belum ada Tugas Yang Masuk"));
     return;
@@ -73,12 +80,12 @@ export async function hapusTugas(daftarTugas:Task[]):Promise<void>{
     return;
   }
   const newArray=daftarTugas.filter((t)=>t.id!==pilihIdTugas);
-  await simpanTugas(newArray);
+  await simpanTugas(newArray,owner);
   console.log(chalk.green("Tugas Berhasil dihapus"));
 }
 
-export async function updateStatus(daftarTugas:Task[]):Promise<void>{
-  const tampilkanTugas=await bacaTugas();
+export async function updateStatus(daftarTugas:Task[],owner:string):Promise<void>{
+  const tampilkanTugas=await bacaTugas(owner);
   if (tampilkanTugas.length===0) {
     console.log("Belum Ada Tugas");
     return;
@@ -114,7 +121,7 @@ export async function updateStatus(daftarTugas:Task[]):Promise<void>{
       console.log("Pilihan Tidak Ada");
       break;
   }
-  await simpanTugas(daftarTugas);
+  await simpanTugas(daftarTugas,owner);
   console.log(`Status ${pilihTugas.title} Sudah diperbarui`);
 }
 

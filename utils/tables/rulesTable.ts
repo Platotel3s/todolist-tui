@@ -1,14 +1,20 @@
+import chalk from "chalk";
 import { Rules } from "../../task";
+
+export function warnaValue(no:string,lebarHN:number){
+  const ambilValue=String(no).padEnd(lebarHN);
+  return chalk.yellowBright(ambilValue);
+}
 
 export function tableAturan(data:Rules[]):void{
   const lebarId=Math.max(2,...data.map((d)=>String(d.no).length));
   const lebarBunyi=Math.max(5,...data.map((b)=>String(b.bunyi).length));
   const garis=`+-${"-".repeat(lebarId)}-+-${"-".repeat(lebarBunyi)}-+`;
   console.log(garis);
-  console.log(`| ${"no".padEnd(lebarId)} | ${"bunyi".padEnd(lebarBunyi)} |`);
+  console.log(`| ${warnaValue("No",lebarId)} | ${warnaValue("Keterangan",lebarBunyi)} |`);
   console.log(garis);
   data.forEach((nizom)=>{
-    console.log(`| ${String(nizom.no).padEnd(lebarId)} | ${nizom.bunyi.padEnd(lebarBunyi)} |`);
+    console.log(`| ${warnaValue(String(nizom.no),lebarId)} | ${warnaValue((nizom.bunyi),lebarBunyi)} |`);
   });
   console.log(garis);
 }

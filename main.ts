@@ -9,18 +9,18 @@ import { prosesLogin, prosesRegister } from "./auth/authService";
 async function main(){
   console.clear();
   
-  let sedangLogin=false;
-  while(!sedangLogin){
+  let userAktif:string|null=null;
+  while(!userAktif){
     console.log(chalk.cyanBright("================|| Welcome ||================"));
     console.log(chalk.cyanBright("1. Login"));
     console.log(chalk.cyanBright("2. Register"));
     console.log(chalk.cyanBright("3. Keluar"));
     console.log(chalk.cyanBright("============================================="));
     const menuAuth=await inputan(chalk.cyanBright("Pilih Menu (bisa ketik 1-3 atau menunya) : "));
-    const finalMenuAuth = menuAuth.toLowerCase();
+    const finalMenuAuth=menuAuth.toLowerCase();
     
     if (finalMenuAuth==='1'||finalMenuAuth==='login') {
-      sedangLogin=await prosesLogin();
+      userAktif=await prosesLogin();
     }else if(finalMenuAuth==='2'||finalMenuAuth==='register'){
       await prosesRegister();
     }else if(finalMenuAuth==='3'||finalMenuAuth==='keluar'){
@@ -32,7 +32,7 @@ async function main(){
     }
   }
 
-  let daftarTugas:Task[]=await bacaTugas();
+  let daftarTugas:Task[]=await bacaTugas(userAktif);
   tableAturan(aturanInputan);
   while (true) {
     console.log(`Jumlah tugas saat ini ada ${daftarTugas.length}`);
@@ -64,9 +64,10 @@ async function main(){
             id:nextId,
             title:judul,
             desc:deskripsi,
-            status:TaskStatus.Todo
+            status:TaskStatus.Todo,
+            owner:userAktif
           });
-          await simpanTugas(daftarTugas);
+          await simpanTugas(daftarTugas,userAktif);
         }
           console.log("===================================");
           daftus(daftarTugas);
@@ -82,15 +83,15 @@ async function main(){
         break;
       case '3':
       case 'update tugas':
-        await updateTugas(daftarTugas);
+        await updateTugas(daftarTugas,userAktif);
         break;
       case '4':
       case 'update status':
-        await updateStatus(daftarTugas);
+        await updateStatus(daftarTugas,userAktif);
         break;
       case '5':
       case 'hapus tugas':
-        await hapusTugas(daftarTugas);
+        await hapusTugas(daftarTugas,userAktif);
         break;
       case '6':
       case 'keluar':

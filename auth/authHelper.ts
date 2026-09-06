@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 import { User } from "./user";
 
-const FILE_PATH="../user.json";
+const FILE_PATH="user.json";
 
 export function hashPassword(password:string){
   return createHash("sha256").update(password).digest("hex");

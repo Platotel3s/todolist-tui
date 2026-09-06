@@ -7,7 +7,8 @@ export interface Task{
   id:number,
   title:string,
   desc:string,
-  status:TaskStatus
+  status:TaskStatus,
+  owner:string
 }
 export interface Rules{
   no:number,
