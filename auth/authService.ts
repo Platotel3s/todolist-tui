@@ -1,7 +1,8 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { bacaUser, hashPassword, simpanUser } from "./authHelper";
+import { bacaUser, hashPassword, simpanUser, verifyPassword, verifyPasswordDenganMigrasi } from "./authHelper";
 import { User } from "./user";
+import { catatBerhasil, catatGagal, cekTerkunci } from "./rateLimiter";
 
 export async function prosesRegister():Promise<void>{
   console.log(chalk.greenBright("================|| Buat Akun ||================"));
@@ -19,7 +20,7 @@ export async function prosesRegister():Promise<void>{
   }
   const newUser:User={
     username:input.username,
-    password:hashPassword(input.password)
+    password:await hashPassword(input.password)
   };
   users.push(newUser);
   await simpanUser(users);
@@ -35,14 +36,21 @@ export async function prosesLogin():Promise<string|null>{
       {type:"password",name:"password",message:"Password : ",mask:"*"}
     ]
   );
+  const waktuTerkunci=await cekTerkunci(input.username);
+  if(waktuTerkunci){
+    const sisaDetik=Math.ceil((waktuTerkunci - Date.now())/1000);
+    console.log(chalk.redBright(`🔒 Akut terkunci sementara karena terlalu banyak percobaan gagal. Coba lagi dalam ${sisaDetik} detik`));
+    return null;
+  }
   const users=await bacaUser();
-  const targetHash=hashPassword(input.password);
-  const userValid=users.find(u=>u.username.toLowerCase()===input.username && u.password===targetHash);
-  if (userValid) {
+  const userValid=users.find(u=>u.username.toLowerCase()===input.username.toLowerCase());
+  if (userValid && await verifyPasswordDenganMigrasi(input.password,userValid,users)) {
+    await catatBerhasil(userValid.username);
     console.clear();
     console.log(chalk.greenBright(`🎉 Halo ${userValid.username}`));
     return userValid.username;
   }else{
+    await catatGagal(input.username);
     console.log(chalk.redBright("❌ Login Gagal"));
     return null;
   }
