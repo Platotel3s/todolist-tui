@@ -37,7 +37,7 @@ export async function prosesLogin():Promise<string|null>{
   );
   const users=await bacaUser();
   const targetHash=hashPassword(input.password);
-  const userValid=users.find(u=>u.username===input.username && u.password===targetHash);
+  const userValid=users.find(u=>u.username.toLowerCase()===input.username && u.password===targetHash);
   if (userValid) {
     console.clear();
     console.log(chalk.greenBright(`🎉 Halo ${userValid.username}`));
