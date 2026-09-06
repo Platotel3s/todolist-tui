@@ -1,6 +1,6 @@
-import { Task, TaskStatus } from "./task";
+import { Task } from "./task";
 import { inputan, rdl } from "./inputan";
-import { bacaTugas,hapusTugas, simpanTugas, updateStatus, updateTugas } from "./logics";
+import { bacaTugas,hapusTugas, isiTugas, tambahTugas, updateStatus, updateTugas } from "./logics";
 import { aturanInputan, tableAturan } from "./utils/tables/rulesTable";
 import chalk from "chalk";
 import { daftus } from "./utils/tables/daftarTugas";
@@ -48,38 +48,11 @@ async function main(){
     switch (finalChoiceMenu) {
       case '1':
       case 'tambah tugas':
-        while (true) {
-          console.log("----- CARA PENULISAN -----");
-          tableAturan(aturanInputan);
-          console.log(chalk.yellow("────────────────────────────────────"));
-          console.log(chalk.yellow("|| AYO PERBANYAK KEGIATAN POSITIF ||"));
-          console.log(chalk.yellow("────────────────────────────────────"));
-          const judul=await inputan("Judul : ");
-          if (judul.toLowerCase()==='end') {
-            break;
-          }
-          const deskripsi=await inputan('Deskripsi : ');
-          const nextId=daftarTugas.length===0?1:Math.max(...daftarTugas.map(t=>t.id))+1;
-          daftarTugas.push({
-            id:nextId,
-            title:judul,
-            desc:deskripsi,
-            status:TaskStatus.Todo,
-            owner:userAktif
-          });
-          await simpanTugas(daftarTugas,userAktif);
-        }
-          console.log("===================================");
-          daftus(daftarTugas);
+        await tambahTugas(userAktif,aturanInputan,daftarTugas);
         break;
       case '2':
       case 'daftar tugas':
-        console.log("\n=================== DAFTAR TUGAS ===================");
-        if(daftarTugas.length===0){
-          console.log("Belum Ada Tugas Yang Masuk");
-        }else{
-          daftus(daftarTugas);
-        }
+        isiTugas(daftarTugas);
         break;
       case '3':
       case 'update tugas':

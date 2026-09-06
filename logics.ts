@@ -3,6 +3,7 @@ import { inputan } from "./inputan";
 import { Rules, Task, TaskStatus } from "./task";
 import { daftus } from "./utils/tables/daftarTugas";
 import chalk from "chalk";
+import { tableAturan } from "./utils/tables/rulesTable";
 
 export async function bacaSemuaTugas():Promise<Task[]>{
   try{
@@ -30,6 +31,41 @@ export async function caraInputUSer():Promise<Rules[]>{
     return JSON.parse(rules);
   } catch{
     return [];
+  }
+}
+
+export async function tambahTugas(userAktif:string,aturanInputan:Rules[],daftarTugas:Task[]):Promise<void>{
+  while (true) {
+    console.log("----- CARA PENULISAN -----");
+    tableAturan(aturanInputan);
+    console.log(chalk.yellow("────────────────────────────────────"));
+    console.log(chalk.yellow("|| AYO PERBANYAK KEGIATAN POSITIF ||"));
+    console.log(chalk.yellow("────────────────────────────────────"));
+    const judul=await inputan("Judul : ");
+    if (judul.toLowerCase()==='end') {
+      break;
+    }
+    const deskripsi=await inputan('Deskripsi : ');
+    const nextId=daftarTugas.length===0?1:Math.max(...daftarTugas.map(t=>t.id))+1;
+    daftarTugas.push({
+      id:nextId,
+      title:judul,
+      desc:deskripsi,
+      status:TaskStatus.Todo,
+      owner:userAktif
+    });
+    await simpanTugas(daftarTugas,userAktif);
+  }
+  console.log("===================================");
+  daftus(daftarTugas);
+}
+
+export function isiTugas(daftarTugas:Task[]){
+  console.log("\n=================== DAFTAR TUGAS ===================");
+  if(daftarTugas.length===0){
+    console.log("Belum Ada Tugas Yang Masuk");
+  }else{
+    daftus(daftarTugas);
   }
 }
 
@@ -74,13 +110,13 @@ export async function hapusTugas(daftarTugas:Task[],owner:string):Promise<void>{
   }
   daftus(daftarTugas);
   const pilihIdTugas=Number(await inputan("Masukkan nomor tugas : "));
-  const cariIdTugas=daftarTugas.some((idTerpilih)=>idTerpilih.id===pilihIdTugas);
-  if (!cariIdTugas) {
+  const index=daftarTugas.findIndex((i)=>i.id===pilihIdTugas);
+  if (index===-1) {
     console.log(chalk.red("Nomor Tidak ada"));
     return;
   }
-  const newArray=daftarTugas.filter((t)=>t.id!==pilihIdTugas);
-  await simpanTugas(newArray,owner);
+  daftarTugas.splice(index,1);
+  await simpanTugas(daftarTugas,owner);
   console.log(chalk.green("Tugas Berhasil dihapus"));
 }
 
