@@ -3,7 +3,6 @@ import { inputan, rdl } from "./inputan";
 import { bacaTugas,hapusTugas, isiTugas, tambahTugas, updateStatus, updateTugas } from "./logics";
 import { aturanInputan, tableAturan } from "./utils/tables/rulesTable";
 import chalk from "chalk";
-import { daftus } from "./utils/tables/daftarTugas";
 import { prosesLogin, prosesRegister } from "./auth/authService";
 
 async function main(){
@@ -11,7 +10,7 @@ async function main(){
   
   let userAktif:string|null=null;
   while(!userAktif){
-    console.log(chalk.cyanBright("================|| Welcome ||================"));
+    console.log(chalk.cyanBright("================|| Welcome ||==============="));
     console.log(chalk.cyanBright("1. Login"));
     console.log(chalk.cyanBright("2. Register"));
     console.log(chalk.cyanBright("3. Keluar"));
