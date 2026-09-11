@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import { Task, TaskStatus } from "../../task";
+import { ConsoleTable } from "./ConsoleTable";
 
 export function warnaStatus(status:TaskStatus,lebar:number){
   const teks=String(status).padEnd(lebar);
@@ -25,6 +26,8 @@ function warnaValue(headerKolom:string,value:string|number,lebarValue:number){
   }else if(normalizeHK==="keterangan"){
     const fixColorize=String(value).padEnd(lebarValue);
     return chalk.cyanBright(fixColorize);
+  }else{
+    return normalizeHK;
   }
 }
 
@@ -49,3 +52,12 @@ export function daftus(data:Task[]):void{
   console.log(garis);
 }
 
+// export function daftus(data:Task[]):void{
+//   const table=new ConsoleTable<Task>([
+//     {heading:"No",getValue:(n)=>n.id,color:chalk.whiteBright,minWidth:2},
+//     {heading:"Title",getValue:(t)=>t.title,color:chalk.yellowBright,minWidth:3},
+//     {heading:"Description",getValue:(d)=>d.desc,color:chalk.cyanBright,minWidth:5},
+//     {heading:"Status",getValue:(s)=>s.status,color:(text)=>warnaStatus(data.find(d=>d.status===text.trim() as TaskStatus)?.status??TaskStatus.Todo)(text),minWidth:6}
+//   ]);
+//   table.print(data);
+// }

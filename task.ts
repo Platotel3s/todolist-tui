@@ -4,13 +4,19 @@ export enum TaskStatus{
   Done="DONE"
 }
 export interface Task{
-  id:number,
-  title:string,
-  desc:string,
-  status:TaskStatus,
-  owner:string
+  id:number;
+  title:string;
+  desc:string;
+  status:TaskStatus;
+  owner:string;
 }
 export interface Rules{
-  no:number,
-  bunyi:string
+  no:number;
+  bunyi:string;
+}
+export interface ColumnDef<T> {
+  header: string;
+  getValue: (row: T) => string | number;
+  color?: (text: string) => string;
+  minWidth?: number;
 }

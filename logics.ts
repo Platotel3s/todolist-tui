@@ -128,7 +128,7 @@ export async function updateStatus(daftarTugas:Task[],owner:string):Promise<void
   }
   console.log("\n=================== UPDATE STATUS ===================");
   daftus(tampilkanTugas);
-  const id=Number(await inputan("Masukkan id Tugas : "));
+  const id=Number(await inputan("Masukkan nomor/judul Tugas : "));
   const pilihTugas=daftarTugas.find((task)=>task.id===id);
   if(!pilihTugas){
     console.log('Tugas Tidak Ada!');

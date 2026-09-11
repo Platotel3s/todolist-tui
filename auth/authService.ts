@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { bacaUser, hashPassword, simpanUser, verifyPassword, verifyPasswordDenganMigrasi } from "./authHelper";
+import { bacaUser, hashPassword, simpanUser, verifyPasswordDenganMigrasi } from "./authHelper";
 import { User } from "./user";
 import { catatBerhasil, catatGagal, cekTerkunci } from "./rateLimiter";
 
@@ -39,7 +39,7 @@ export async function prosesLogin():Promise<string|null>{
   const waktuTerkunci=await cekTerkunci(input.username);
   if(waktuTerkunci){
     const sisaDetik=Math.ceil((waktuTerkunci - Date.now())/1000);
-    console.log(chalk.redBright(`🔒 Akut terkunci sementara karena terlalu banyak percobaan gagal. Coba lagi dalam ${sisaDetik} detik`));
+    console.log(chalk.redBright(`🔒 Akun terkunci sementara karena terlalu banyak percobaan gagal. Coba lagi dalam ${sisaDetik} detik`));
     return null;
   }
   const users=await bacaUser();
