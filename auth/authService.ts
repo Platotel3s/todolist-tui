@@ -47,7 +47,6 @@ export async function prosesLogin():Promise<string|null>{
   if (userValid && await verifyPasswordDenganMigrasi(input.password,userValid,users)) {
     await catatBerhasil(userValid.username);
     console.clear();
-    console.log(chalk.greenBright(`🎉 Halo ${userValid.username}`));
     return userValid.username;
   }else{
     await catatGagal(input.username);

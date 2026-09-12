@@ -4,6 +4,7 @@ import { bacaTugas,hapusTugas, isiTugas, tambahTugas, updateStatus, updateTugas 
 import { aturanInputan, tableAturan } from "./utils/tables/rulesTable";
 import chalk from "chalk";
 import { prosesLogin, prosesRegister } from "./auth/authService";
+import { cetakHeader } from "./utils/headerMenu";
 
 async function main(){
   console.clear();
@@ -32,6 +33,7 @@ async function main(){
   }
 
   let daftarTugas:Task[]=await bacaTugas(userAktif);
+  cetakHeader(userAktif);
   tableAturan(aturanInputan);
   while (true) {
     console.log(`Jumlah tugas saat ini ada ${daftarTugas.length}`);
