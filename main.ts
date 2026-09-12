@@ -15,7 +15,7 @@ async function main(){
     console.log(chalk.cyanBright("2. Register"));
     console.log(chalk.cyanBright("3. Keluar"));
     console.log(chalk.cyanBright("============================================="));
-    const menuAuth=await inputan(chalk.cyanBright("Pilih Menu (bisa ketik 1-3 atau menunya) : "));
+    const menuAuth=await inputan(chalk.cyanBright("Pilih Menu (bisa ketik 1-3 atau menunya) : "),(val)=>val);
     const finalMenuAuth=menuAuth.toLowerCase();
     
     if (finalMenuAuth==='1'||finalMenuAuth==='login') {
@@ -41,7 +41,7 @@ async function main(){
     console.log("4. Update Status");
     console.log("5. Hapus Tugas");
     console.log("6. Keluar");
-    const pilihMenu=await inputan("Pilih nomor menu : ");
+    const pilihMenu=await inputan("Pilih nomor menu : ",(val)=>val);
 
     const finalChoiceMenu=pilihMenu.toLowerCase();
     switch (finalChoiceMenu) {

@@ -1,5 +1,5 @@
 import readline from "readline";
-export function inputan(pertanyaan:string):Promise<string>{
+export function inputan<T>(pertanyaan:string,parsing:(input:string)=>T):Promise<T>{
   const rl=readline.createInterface({
     input:process.stdin,
     output:process.stdout
@@ -7,7 +7,7 @@ export function inputan(pertanyaan:string):Promise<string>{
   return new Promise((resolve)=>{
     rl.question(pertanyaan,(jawaban)=>{
       rl.close();
-      resolve(jawaban);
+      resolve(parsing(jawaban));
     });
   });
 }
